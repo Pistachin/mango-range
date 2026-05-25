@@ -1,5 +1,33 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+# Techincal test
+
+Since this is a technical test, the `README.md` will include the original that Next.js adds automatically in case you need it to initialise the project, and this part, that is a summary of the technical test, as the title above indicates.
+
+The intention of this part is to explain anything that is not self explanatory with code and Git commits.
+
+## First steps
+
+I approached the techincal test by reading the instructions first a few times to get a general idea of what I need to do. **My idea is to create an MVP that gets the job done, that is, a Range slider.** And then eventually polish on minor things, improvements and get it as best as possible.
+
+I consider important giving a fair warning that the amount of iterations/increments that this feature will have is far from the ones that a production one would, since this is "just" a technical test. I'll try to balance the result between overdoing it and not dedicating to it enough time.
+
+I expect to deliver a fine product, knowing which improvements could be added in future iterations/increments and at the same time, to showcase what I'm capable of.
+
+I decided to add Prettier, even though is not strictly necessary, I use it and I know projects usually have (and should have) a common and shared formatting of code to prevent conflicts and have the same style guidelines for everyone, and those are made easier with Prettier.
+
+The original PDF file said that the project was meant to be run in port `8080` even thought the Next.js default port is `3000` and it would work just as well, I followed the requirement.
+
+Then I created three files:
+
+- `/app/exercise-1/page.tsx`
+- `/app/exercise-2/page.tsx`
+- `/_components/Range.tsx`
+
+The idea is to use this structure to create the whole project.
+
+# Original Next.js `README.md`
+
 ## Getting Started
 
 First, run the development server:
