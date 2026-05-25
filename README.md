@@ -14,6 +14,18 @@ I consider important giving a fair warning that the amount of iterations/increme
 
 I expect to deliver a fine product, knowing which improvements could be added in future iterations/increments and at the same time, to showcase what I'm capable of.
 
+I decided to add Prettier, even though is not strictly necessary, I use it and I know projects usually have (and should have) a common and shared formatting of code to prevent conflicts and have the same style guidelines for everyone, and those are made easier with Prettier.
+
+The original PDF file said that the project was meant to be run in port `8080` even thought the Next.js default port is `3000` and it would work just as well, I followed the requirement.
+
+Then I created three files:
+
+- `/app/exercise-1/page.tsx`
+- `/app/exercise-2/page.tsx`
+- `/_components/Range.tsx`
+
+The idea is to use this structure to create the whole project.
+
 # Original Next.js `README.md`
 
 ## Getting Started
