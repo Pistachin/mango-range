@@ -26,6 +26,16 @@ Then I created three files:
 
 The idea is to use this structure to create the whole project.
 
+## Basic Range component
+
+I decided to create a "basic" Range component, this now is using static mocked data in the `exercise` components, but in the next steps I might include some other type of data mocking.
+
+Next steps include:
+
+- Make changes to exercise 2 for the Range to work with that data.
+- Add a way of mocking data from a server call instead of doing it manually.
+- Add tests for the `Range.tsx` component and both exercises.
+
 # Original Next.js `README.md`
 
 ## Getting Started
