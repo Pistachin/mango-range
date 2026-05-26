@@ -27,6 +27,8 @@ export default function Range({
   const dragTarget = useRef<'min' | 'max' | null>(null);
   const userMinRef = useRef(userMin);
   const userMaxRef = useRef(userMax);
+  const onChangeRef = useRef(onChange);
+  const useFixed = isFixed && fixedValues && fixedValues.length > 1;
 
   const inputClass = 'w-10 p-1 focus:outline-none';
   const draggableClass =
@@ -44,7 +46,14 @@ export default function Range({
     }
   };
 
-  const toPercent = (value: number) => {
+  const valueToPercent = (value: number) => {
+    if (useFixed) {
+      const index = fixedValues!.indexOf(value);
+      if (index !== -1) {
+        return (index / (fixedValues.length - 1)) * 100;
+      }
+    }
+
     return ((value - settingsMin) / (settingsMax - settingsMin)) * 100;
   };
 
@@ -62,6 +71,11 @@ export default function Range({
   const percentToValue = (clientX: number) => {
     const rect = rangeRef.current!.getBoundingClientRect();
     const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+
+    if (useFixed) {
+      const index = Math.round(ratio * (fixedValues!.length - 1));
+      return fixedValues![index];
+    }
     const rawValue = settingsMin + ratio * (settingsMax - settingsMin);
     const decimalPlaces = step.toString().split('.')[1]?.length || 0;
     return parseFloat(rawValue.toFixed(decimalPlaces));
@@ -70,13 +84,14 @@ export default function Range({
   useEffect(() => {
     userMinRef.current = userMin;
     userMaxRef.current = userMax;
+    onChangeRef.current = onChange;
   });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragTarget.current) return;
       const newValue = percentToValue(e.clientX);
-      onChange(
+      onChangeRef.current(
         dragTarget.current === 'min'
           ? { userMin: Math.min(newValue, userMaxRef.current), userMax: userMaxRef.current }
           : { userMin: userMinRef.current, userMax: Math.max(newValue, userMinRef.current) }
@@ -95,7 +110,7 @@ export default function Range({
   }, []);
 
   return (
-    <div className="px-2 py-4 min-w-[150px] w-full max-w-md flex items-center">
+    <div className="px-2 py-4 min-w-[300px] w-full max-w-md flex items-center">
       {isFixed ? (
         <div>{userMin} €</div>
       ) : (
@@ -119,18 +134,18 @@ export default function Range({
         <div
           className="absolute h-full bg-black rounded-full"
           style={{
-            left: `${toPercent(userMin)}%`,
-            width: `${toPercent(userMax) - toPercent(userMin)}%`,
+            left: `${valueToPercent(userMin)}%`,
+            width: `${valueToPercent(userMax) - valueToPercent(userMin)}%`,
           }}
         />
         <div
           className={draggableClass}
-          style={{ left: `${toPercent(userMin)}%` }}
+          style={{ left: `${valueToPercent(userMin)}%` }}
           onMouseDown={() => (dragTarget.current = 'min')}
         />
         <div
           className={draggableClass}
-          style={{ left: `${toPercent(userMax)}%` }}
+          style={{ left: `${valueToPercent(userMax)}%` }}
           onMouseDown={() => (dragTarget.current = 'max')}
         />
       </div>
