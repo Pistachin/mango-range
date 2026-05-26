@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 # Techincal test
 
-Since this is a technical test, the `README.md` will include the original that Next.js adds automatically in case you need it to initialise the project, and this part, that is a summary of the technical test, as the title above indicates.
+Since this is a technical test, the `README.md` will include the original that Next.js adds automatically, in case you need it to run the project, and then my part, which is a summary of the technical test, as the title above indicates.
 
 The intention of this part is to explain anything that is not self explanatory with code and Git commits.
 
@@ -16,7 +16,7 @@ I expect to deliver a fine product, knowing which improvements could be added in
 
 I decided to add Prettier, even though is not strictly necessary, I use it and I know projects usually have (and should have) a common and shared formatting of code to prevent conflicts and have the same style guidelines for everyone, and those are made easier with Prettier.
 
-The original PDF file said that the project was meant to be run in port `8080` even thought the Next.js default port is `3000` and it would work just as well, I followed the requirement.
+The original PDF file said that the project was meant to be run in port `8080`. Next.js has set as a default port `3000`, and even though that would work just as well, I decided to follow the requirement.
 
 Then I created three files:
 
@@ -35,6 +35,10 @@ Next steps include:
 - Make changes to exercise 2 for the Range to work with that data.
 - Add a way of mocking data from a server call instead of doing it manually.
 - Add tests for the `Range.tsx` component and both exercises.
+
+## Exercise 2
+
+After that I made the necessary changes in the Range component and `/exercise-2/page.tsx` so I could make the Range selector work with the fixed values coming from an array. I added minor visual fixes and buttons to access each exercise in the main page.
 
 # Original Next.js `README.md`
 
