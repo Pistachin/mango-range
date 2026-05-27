@@ -108,6 +108,59 @@ describe('Range', () => {
       expect(onChange).not.toHaveBeenCalled();
     });
   });
+
+  describe('Drag interaction', () => {
+    it('calls onChange when the min handle is dragged', () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} onChange={onChange} />);
+
+      // jsdom returns zero dimensions; mock to get predictable percentToValue results
+      const trackContainer = screen.getByTestId('filled-track').parentElement!;
+      vi.spyOn(trackContainer, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        right: 200,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      });
+
+      // handles are aria-hidden in free mode, so query with { hidden: true }
+      const minHandle = screen.getByTestId('min-handle');
+      fireEvent.mouseDown(minHandle);
+      fireEvent.mouseMove(window, { clientX: 50 }); // 50/200 = 25% → value 25
+      fireEvent.mouseUp(window);
+
+      expect(onChange).toHaveBeenCalledWith({ userMin: 25, userMax: 80 });
+    });
+  });
+
+  describe('Fixed mode keyboard navigation', () => {
+    const fixedProps = {
+      ...defaultProps,
+      type: 'fixed' as const,
+      fixedValues: [10, 20, 50, 80, 100],
+    };
+
+    it('ArrowRight on the min handle advances to the next fixed value', async () => {
+      const onChange = vi.fn();
+      render(<Range {...fixedProps} onChange={onChange} />);
+      screen.getByTestId('min-handle').focus();
+      await userEvent.keyboard('{ArrowRight}');
+      expect(onChange).toHaveBeenCalledWith({ userMin: 50, userMax: 80 });
+    });
+
+    it('ArrowLeft on the min handle does nothing when already at the first fixed value', async () => {
+      const onChange = vi.fn();
+      render(<Range {...fixedProps} userMin={10} onChange={onChange} />);
+      screen.getByTestId('min-handle').focus();
+      await userEvent.keyboard('{ArrowLeft}');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('ControlledRange', () => {

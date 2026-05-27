@@ -158,6 +158,7 @@ export default function Range({
         />
         <div
           className={draggableClass}
+          data-testid="min-handle"
           role="slider"
           aria-valuenow={userMin}
           aria-valuemin={settingsMin}
@@ -171,6 +172,7 @@ export default function Range({
         />
         <div
           className={draggableClass}
+          data-testid="max-handle"
           role="slider"
           aria-valuenow={userMax}
           aria-valuemin={settingsMin}
