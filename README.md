@@ -22,7 +22,7 @@ Then I created three files:
 
 - `/app/exercise-1/page.tsx`
 - `/app/exercise-2/page.tsx`
-- `/_components/Range.tsx`
+- `/app/_components/Range.tsx`
 
 The idea is to use this structure to create the whole project.
 
@@ -39,6 +39,13 @@ Next steps include:
 ## Exercise 2
 
 After that I made the necessary changes in the Range component and `/exercise-2/page.tsx` so I could make the Range selector work with the fixed values coming from an array. I added minor visual fixes and buttons to access each exercise in the main page.
+
+## Mock an API request
+
+Since I'm working with Next.js, I decided to add an API folder with two endpoints (Route Handlers) to mock the data. This way I'm following the request of the PDF (mock a service) but better aligned with Next.js:
+
+- `/app/api/fixed-values`
+- `/app/api/min-max`
 
 # Original Next.js `README.md`
 
