@@ -34,9 +34,9 @@ I decided to create a "basic" Range component, this now is using static mocked d
 
 Next steps include:
 
-- Make changes to exercise 2 for the Range to work with that data.
-- Add a way of mocking data from a server call instead of doing it manually.
-- Add tests for the `Range.tsx` component and both exercises.
+- [x] Make changes to exercise 2 for the Range to work with that data.
+- [x] Add a way of mocking data from a server call instead of doing it manually.
+- [x] Add tests for the `Range.tsx` component and both exercises.
 
 ### Exercise 2
 
@@ -56,6 +56,25 @@ Since I'm working with Next.js, I decided to add an API folder with two endpoint
 
 - `/app/api/fixed-values`
 - `/app/api/min-max`
+
+### Tests
+
+Tests are written with Vitest + Testing Library. `Range` is a fully controlled component (no internal state). This could cause issues when testing the component, so I decided to include a `ControlledRange` wrapper to simulate a real parent since, without that, the component re-renders with the original props, so any intermediate keystrokes affect that initial prop value. With `ControlledRange` the value is kept in sync with what is typed.
+
+Beyond the `Range` unit tests, two integration tests cover each exercise at the page level. They mock `fetch` via `vi.spyOn` and call the async server component directly — `render(await Exercise1())` — which is possible with React 19. This validates the full chain: API response → server component → client component renders correctly.
+
+A focused unit test on `Exercise2Client` also verifies that `settingsMin` and `settingsMax` are correctly derived from the first and last elements of the fixed values array, since a silent regression there would not be caught at the `Range` level.
+
+### Accessibility
+
+The Range component has some accessibility parts, mainly to tackle tab navigation, keyboard value changing and screen readers.
+
+### Next steps
+
+In order to not overdo this technical test, I decided that there are things I'm not including but I'd definitely value including in a real scenario, in a production context these feel like the natural steps to follow:
+
+- **Storybook**: the `Range` component has enough visual states (free mode, fixed mode, boundary values, different step sizes) that Storybook stories would be valuable both as living documentation and as a base for visual regression tests.
+- **Loading and error states**: the exercise pages are server components that `await` a fetch call before rendering. In a real implementation (not just a proof of concept), I would've included a `loading.tsx` for a skeleton or spinner and an `error.tsx` to handle failed requests.
 
 # Original Next.js `README.md`
 
