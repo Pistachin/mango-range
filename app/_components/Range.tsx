@@ -58,6 +58,7 @@ export default function Range({
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
     const current = target === 'min' ? userMin : userMax;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -70,7 +71,6 @@ export default function Range({
 
   const handleSliderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, target: 'min' | 'max') => {
     const current = target === 'min' ? userMin : userMax;
-    console.log({ current });
     if (useFixed) {
       const currentIndex = fixedValues!.indexOf(current);
       if (e.key === 'ArrowRight' && currentIndex < fixedValues!.length - 1) {
