@@ -57,6 +57,10 @@ Since I'm working with Next.js, I decided to add an API folder with two endpoint
 - `/app/api/fixed-values`
 - `/app/api/min-max`
 
+### Tests
+
+Tests are written with Vitest + Testing Library. `Range` is a fully controlled component (no internal state). This could cause issues when testing the component, so I decided to include a `ControlledRange` wrapper to simulate a real parent since, without that, the component re-renders with the original props, so any intermediate keystrokes affect that initial prop value. With `ControlledRange` the value is kept in sync with what is typed.
+
 # Original Next.js `README.md`
 
 ## Getting Started
