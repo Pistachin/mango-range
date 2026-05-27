@@ -6,7 +6,9 @@ Since this is a technical test, the `README.md` will include the original that N
 
 The intention of this part is to explain anything that is not self explanatory with code and Git commits.
 
-## First steps
+## Implementation
+
+### First steps
 
 I approached the techincal test by reading the instructions first a few times to get a general idea of what I need to do. **My idea is to create an MVP that gets the job done, that is, a Range slider.** And then eventually polish on minor things, improvements and get it as best as possible.
 
@@ -26,7 +28,7 @@ Then I created three files:
 
 The idea is to use this structure to create the whole project.
 
-## Basic Range component
+### Basic Range component
 
 I decided to create a "basic" Range component, this now is using static mocked data in the `exercise` components, but in the next steps I might include some other type of data mocking.
 
@@ -36,11 +38,19 @@ Next steps include:
 - Add a way of mocking data from a server call instead of doing it manually.
 - Add tests for the `Range.tsx` component and both exercises.
 
-## Exercise 2
+### Exercise 2
 
 After that I made the necessary changes in the Range component and `/exercise-2/page.tsx` so I could make the Range selector work with the fixed values coming from an array. I added minor visual fixes and buttons to access each exercise in the main page.
 
-## Mock an API request
+### Tests
+
+Tests are written with Vitest + Testing Library. `Range` is a fully controlled component (no internal state). This could cause issues when testing the component, so I decided to include a `ControlledRange` wrapper to simulate a real parent since, without that, the component re-renders with the original props, so any intermediate keystrokes affect that initial prop value. With `ControlledRange` the value is kept in sync with what is typed.
+
+### Accessibility
+
+The Range component has some accessibility parts, mainly to tackle tab navigation, keyboard value changing and screen readers.
+
+### Mock an API request
 
 Since I'm working with Next.js, I decided to add an API folder with two endpoints (Route Handlers) to mock the data. This way I'm following the request of the PDF (mock a service) but better aligned with Next.js:
 

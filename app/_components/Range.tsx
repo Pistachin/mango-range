@@ -57,7 +57,7 @@ export default function Range({
     return ((value - settingsMin) / (settingsMax - settingsMin)) * 100;
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
     const current = target === 'min' ? userMin : userMax;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -65,6 +65,22 @@ export default function Range({
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       setValueManually(current - step, target);
+    }
+  };
+
+  const handleSliderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, target: 'min' | 'max') => {
+    const current = target === 'min' ? userMin : userMax;
+    console.log({ current });
+    if (useFixed) {
+      const currentIndex = fixedValues!.indexOf(current);
+      if (e.key === 'ArrowRight' && currentIndex < fixedValues!.length - 1) {
+        e.preventDefault();
+        setValueManually(fixedValues![currentIndex + 1], target);
+      } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+        e.preventDefault();
+        setValueManually(fixedValues![currentIndex - 1], target);
+      }
+      return;
     }
   };
 
@@ -112,7 +128,7 @@ export default function Range({
   return (
     <div className="px-2 py-4 min-w-[300px] w-full max-w-md flex items-center">
       {isFixed ? (
-        <div>{userMin} €</div>
+        <div className="p-1">{userMin} €</div>
       ) : (
         <>
           <input
@@ -123,8 +139,10 @@ export default function Range({
             aria-valuenow={userMin}
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
+            aria-label="Minimum value"
+            id="min-input"
             onChange={(e) => setValueManually(Number(e.target.value), 'min')}
-            onKeyDown={(e) => handleKeyDown(e, 'min')}
+            onKeyDown={(e) => handleInputKeyDown(e, 'min')}
             className={`${inputClass} text-end`}
           />{' '}
           €
@@ -133,6 +151,7 @@ export default function Range({
       <div ref={rangeRef} className="relative h-1 bg-gray-200 rounded-full mx-3 flex-grow">
         <div
           className="absolute h-full bg-black rounded-full"
+          data-testid="filled-track"
           style={{
             left: `${valueToPercent(userMin)}%`,
             width: `${valueToPercent(userMax) - valueToPercent(userMin)}%`,
@@ -140,17 +159,35 @@ export default function Range({
         />
         <div
           className={draggableClass}
+          data-testid="min-handle"
+          role="slider"
+          aria-valuenow={userMin}
+          aria-valuemin={settingsMin}
+          aria-valuemax={settingsMax}
+          aria-hidden={!useFixed}
+          aria-label="Minimum value"
+          tabIndex={useFixed ? 0 : -1}
+          onKeyDown={(e) => handleSliderKeyDown(e, 'min')}
           style={{ left: `${valueToPercent(userMin)}%` }}
           onMouseDown={() => (dragTarget.current = 'min')}
         />
         <div
           className={draggableClass}
+          data-testid="max-handle"
+          role="slider"
+          aria-valuenow={userMax}
+          aria-valuemin={settingsMin}
+          aria-valuemax={settingsMax}
+          aria-hidden={!useFixed}
+          aria-label="Maximum value"
+          tabIndex={useFixed ? 0 : -1}
+          onKeyDown={(e) => handleSliderKeyDown(e, 'max')}
           style={{ left: `${valueToPercent(userMax)}%` }}
           onMouseDown={() => (dragTarget.current = 'max')}
         />
       </div>
       {isFixed ? (
-        <div>{userMax} €</div>
+        <div className="p-1">{userMax} €</div>
       ) : (
         <>
           <input
@@ -161,8 +198,10 @@ export default function Range({
             aria-valuenow={userMax}
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
+            aria-label="Maximum value"
+            id="max-input"
             onChange={(e) => setValueManually(Number(e.target.value), 'max')}
-            onKeyDown={(e) => handleKeyDown(e, 'max')}
+            onKeyDown={(e) => handleInputKeyDown(e, 'max')}
             className={`${inputClass} text-start`}
           />{' '}
           €
