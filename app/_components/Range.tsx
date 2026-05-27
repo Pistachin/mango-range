@@ -123,6 +123,7 @@ export default function Range({
             aria-valuenow={userMin}
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
+            aria-label="Minimum value"
             onChange={(e) => setValueManually(Number(e.target.value), 'min')}
             onKeyDown={(e) => handleKeyDown(e, 'min')}
             className={`${inputClass} text-end`}
@@ -133,6 +134,7 @@ export default function Range({
       <div ref={rangeRef} className="relative h-1 bg-gray-200 rounded-full mx-3 flex-grow">
         <div
           className="absolute h-full bg-black rounded-full"
+          data-testid="filled-track"
           style={{
             left: `${valueToPercent(userMin)}%`,
             width: `${valueToPercent(userMax) - valueToPercent(userMin)}%`,
@@ -161,6 +163,7 @@ export default function Range({
             aria-valuenow={userMax}
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
+            aria-label="Maximum value"
             onChange={(e) => setValueManually(Number(e.target.value), 'max')}
             onKeyDown={(e) => handleKeyDown(e, 'max')}
             className={`${inputClass} text-start`}
