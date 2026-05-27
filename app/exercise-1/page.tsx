@@ -1,28 +1,13 @@
-'use client';
-import { useState } from 'react';
-import Range from '@/app/_components/Range';
+import Exercise1Client from './_components/Exercise1Client';
 
-export default function Exercise1() {
-  const [userMin, setUserMin] = useState(0);
-  const [userMax, setUserMax] = useState(100);
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080';
 
-  const handleChange = (values: { userMin: number; userMax: number }) => {
-    setUserMin(values.userMin);
-    setUserMax(values.userMax);
-  };
-
+export default async function Exercise1() {
+  const values = await fetch(`${baseURL}/api/min-max`).then((res) => res.json());
   return (
     <div>
       <h1>Exercise 1</h1>
-      <Range
-        settingsMin={0}
-        settingsMax={100}
-        type="free"
-        onChange={handleChange}
-        userMin={userMin}
-        userMax={userMax}
-        step={1}
-      />
+      <Exercise1Client values={values} />
     </div>
   );
 }

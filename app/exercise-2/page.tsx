@@ -1,29 +1,14 @@
-'use client';
-import Range from '@/app/_components/Range';
-import { useState } from 'react';
+import Exercise2Client from './_components/Exercise2Client';
 
-const MOCK_VALUES = [1.99, 5.99, 10.99, 30.99, 50.99, 70.99];
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8080';
 
-export default function Exercise2() {
-  const [userMin, setUserMin] = useState(MOCK_VALUES[0]);
-  const [userMax, setUserMax] = useState(MOCK_VALUES[MOCK_VALUES.length - 1]);
-  const handleChange = (values: { userMin: number; userMax: number }) => {
-    setUserMin(values.userMin);
-    setUserMax(values.userMax);
-  };
+export default async function Exercise2() {
+  const values = await fetch(`${baseURL}/api/fixed-values`).then((res) => res.json());
 
   return (
     <div>
       <h1>Exercise 2</h1>
-      <Range
-        settingsMin={MOCK_VALUES[0]}
-        settingsMax={MOCK_VALUES[MOCK_VALUES.length - 1]}
-        type="fixed"
-        fixedValues={MOCK_VALUES}
-        onChange={handleChange}
-        userMin={userMin}
-        userMax={userMax}
-      />
+      <Exercise2Client values={values} />
     </div>
   );
 }
