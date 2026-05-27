@@ -128,7 +128,7 @@ export default function Range({
   return (
     <div className="px-2 py-4 min-w-[300px] w-full max-w-md flex items-center">
       {isFixed ? (
-        <div>{userMin} €</div>
+        <div className="p-1">{userMin} €</div>
       ) : (
         <>
           <input
@@ -140,6 +140,7 @@ export default function Range({
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
             aria-label="Minimum value"
+            id="min-input"
             onChange={(e) => setValueManually(Number(e.target.value), 'min')}
             onKeyDown={(e) => handleInputKeyDown(e, 'min')}
             className={`${inputClass} text-end`}
@@ -186,7 +187,7 @@ export default function Range({
         />
       </div>
       {isFixed ? (
-        <div>{userMax} €</div>
+        <div className="p-1">{userMax} €</div>
       ) : (
         <>
           <input
@@ -198,6 +199,7 @@ export default function Range({
             aria-valuemin={settingsMin}
             aria-valuemax={settingsMax}
             aria-label="Maximum value"
+            id="max-input"
             onChange={(e) => setValueManually(Number(e.target.value), 'max')}
             onKeyDown={(e) => handleInputKeyDown(e, 'max')}
             className={`${inputClass} text-start`}
