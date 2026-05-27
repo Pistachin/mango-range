@@ -46,6 +46,10 @@ After that I made the necessary changes in the Range component and `/exercise-2/
 
 Tests are written with Vitest + Testing Library. `Range` is a fully controlled component (no internal state). This could cause issues when testing the component, so I decided to include a `ControlledRange` wrapper to simulate a real parent since, without that, the component re-renders with the original props, so any intermediate keystrokes affect that initial prop value. With `ControlledRange` the value is kept in sync with what is typed.
 
+### Accessibility
+
+The Range component has some accessibility parts, mainly to tackle tab navigation, keyboard value changing and screen readers.
+
 ### Mock an API request
 
 Since I'm working with Next.js, I decided to add an API folder with two endpoints (Route Handlers) to mock the data. This way I'm following the request of the PDF (mock a service) but better aligned with Next.js:

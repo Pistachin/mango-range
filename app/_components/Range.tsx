@@ -57,7 +57,7 @@ export default function Range({
     return ((value - settingsMin) / (settingsMax - settingsMin)) * 100;
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
     const current = target === 'min' ? userMin : userMax;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -65,6 +65,22 @@ export default function Range({
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       setValueManually(current - step, target);
+    }
+  };
+
+  const handleSliderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, target: 'min' | 'max') => {
+    const current = target === 'min' ? userMin : userMax;
+    console.log({ current });
+    if (useFixed) {
+      const currentIndex = fixedValues!.indexOf(current);
+      if (e.key === 'ArrowRight' && currentIndex < fixedValues!.length - 1) {
+        e.preventDefault();
+        setValueManually(fixedValues![currentIndex + 1], target);
+      } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+        e.preventDefault();
+        setValueManually(fixedValues![currentIndex - 1], target);
+      }
+      return;
     }
   };
 
@@ -125,7 +141,7 @@ export default function Range({
             aria-valuemax={settingsMax}
             aria-label="Minimum value"
             onChange={(e) => setValueManually(Number(e.target.value), 'min')}
-            onKeyDown={(e) => handleKeyDown(e, 'min')}
+            onKeyDown={(e) => handleInputKeyDown(e, 'min')}
             className={`${inputClass} text-end`}
           />{' '}
           €
@@ -142,11 +158,27 @@ export default function Range({
         />
         <div
           className={draggableClass}
+          role="slider"
+          aria-valuenow={userMin}
+          aria-valuemin={settingsMin}
+          aria-valuemax={settingsMax}
+          aria-hidden={!useFixed}
+          aria-label="Minimum value"
+          tabIndex={useFixed ? 0 : -1}
+          onKeyDown={(e) => handleSliderKeyDown(e, 'min')}
           style={{ left: `${valueToPercent(userMin)}%` }}
           onMouseDown={() => (dragTarget.current = 'min')}
         />
         <div
           className={draggableClass}
+          role="slider"
+          aria-valuenow={userMax}
+          aria-valuemin={settingsMin}
+          aria-valuemax={settingsMax}
+          aria-hidden={!useFixed}
+          aria-label="Maximum value"
+          tabIndex={useFixed ? 0 : -1}
+          onKeyDown={(e) => handleSliderKeyDown(e, 'max')}
           style={{ left: `${valueToPercent(userMax)}%` }}
           onMouseDown={() => (dragTarget.current = 'max')}
         />
@@ -165,7 +197,7 @@ export default function Range({
             aria-valuemax={settingsMax}
             aria-label="Maximum value"
             onChange={(e) => setValueManually(Number(e.target.value), 'max')}
-            onKeyDown={(e) => handleKeyDown(e, 'max')}
+            onKeyDown={(e) => handleInputKeyDown(e, 'max')}
             className={`${inputClass} text-start`}
           />{' '}
           €
