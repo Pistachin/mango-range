@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import Exercise2 from './page';
 
-vi.mock('next/dist/client/link', () => ({
+vi.mock('next/link', () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
