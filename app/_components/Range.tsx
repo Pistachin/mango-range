@@ -58,7 +58,6 @@ export default function Range({
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, target: 'min' | 'max') => {
     const current = target === 'min' ? userMin : userMax;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
