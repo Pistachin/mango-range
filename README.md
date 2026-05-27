@@ -42,6 +42,10 @@ Next steps include:
 
 After that I made the necessary changes in the Range component and `/exercise-2/page.tsx` so I could make the Range selector work with the fixed values coming from an array. I added minor visual fixes and buttons to access each exercise in the main page.
 
+### Tests
+
+Tests are written with Vitest + Testing Library. `Range` is a fully controlled component (no internal state). This could cause issues when testing the component, so I decided to include a `ControlledRange` wrapper to simulate a real parent since, without that, the component re-renders with the original props, so any intermediate keystrokes affect that initial prop value. With `ControlledRange` the value is kept in sync with what is typed.
+
 ### Mock an API request
 
 Since I'm working with Next.js, I decided to add an API folder with two endpoints (Route Handlers) to mock the data. This way I'm following the request of the PDF (mock a service) but better aligned with Next.js:

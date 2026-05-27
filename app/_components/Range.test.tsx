@@ -1,6 +1,23 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
 import Range from './Range';
+import type { ComponentProps } from 'react';
+
+function ControlledRange({ onChange, ...props }: ComponentProps<typeof Range>) {
+  const [values, setValues] = React.useState({ userMin: props.userMin, userMax: props.userMax });
+  return (
+    <Range
+      {...props}
+      {...values}
+      onChange={(newValues) => {
+        setValues(newValues);
+        onChange(newValues);
+      }}
+    />
+  );
+}
 
 const defaultProps = {
   settingsMin: 0,
@@ -39,6 +56,45 @@ describe('Range', () => {
       const track = screen.getByTestId('filled-track') as HTMLElement;
       expect(track.style.left).toBe('20%');
       expect(track.style.width).toBe('60%');
+    });
+  });
+});
+
+describe('ControlledRange', () => {
+  describe('Input editing when mode is free', () => {
+    it('calls onChange with the new value when the user types in the min input', async () => {
+      const onChange = vi.fn();
+      render(<ControlledRange {...defaultProps} onChange={onChange} />);
+      const minInput = screen.getByRole('spinbutton', { name: 'Minimum value' });
+      await userEvent.clear(minInput);
+      await userEvent.type(minInput, '30');
+      expect(onChange).toHaveBeenLastCalledWith({ userMin: 30, userMax: 80 });
+    });
+
+    it('ignores values outside the settingsMin/settingsMax bounds', async () => {
+      const onChange = vi.fn();
+      render(<ControlledRange {...defaultProps} onChange={onChange} />);
+      const minInput = screen.getByRole('spinbutton', { name: 'Minimum value' });
+      fireEvent.change(minInput, { target: { value: '150' } });
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('clamps typed min value to userMax when it would exceed it', async () => {
+      const onChange = vi.fn();
+      render(<ControlledRange {...defaultProps} onChange={onChange} />);
+      const minInput = screen.getByRole('spinbutton', { name: 'Minimum value' });
+      await userEvent.clear(minInput);
+      await userEvent.type(minInput, '90');
+      expect(onChange).toHaveBeenLastCalledWith({ userMin: 80, userMax: 80 });
+    });
+
+    it('clamps typed max value to userMin when it would go below it', async () => {
+      const onChange = vi.fn();
+      render(<ControlledRange {...defaultProps} onChange={onChange} />);
+      const maxInput = screen.getByRole('spinbutton', { name: 'Maximum value' });
+      await userEvent.clear(maxInput);
+      await userEvent.type(maxInput, '10');
+      expect(onChange).toHaveBeenLastCalledWith({ userMin: 20, userMax: 20 });
     });
   });
 });
