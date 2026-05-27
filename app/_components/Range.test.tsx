@@ -58,6 +58,56 @@ describe('Range', () => {
       expect(track.style.width).toBe('60%');
     });
   });
+
+  describe('Keyboard input change', () => {
+    it('ArrowUp on the min input increments by step', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Minimum value' }).focus();
+      await userEvent.keyboard('{ArrowUp}');
+      expect(onChange).toHaveBeenCalledWith({ userMin: 21, userMax: 80 });
+    });
+
+    it('ArrowDown on the min input decrements by step', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Minimum value' }).focus();
+      await userEvent.keyboard('{ArrowDown}');
+      expect(onChange).toHaveBeenCalledWith({ userMin: 19, userMax: 80 });
+    });
+
+    it('ArrowUp on the max input increments by step', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Maximum value' }).focus();
+      await userEvent.keyboard('{ArrowUp}');
+      expect(onChange).toHaveBeenCalledWith({ userMin: 20, userMax: 81 });
+    });
+
+    it('ArrowDown on the max input decrements by step', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Maximum value' }).focus();
+      await userEvent.keyboard('{ArrowDown}');
+      expect(onChange).toHaveBeenCalledWith({ userMin: 20, userMax: 79 });
+    });
+
+    it('does not step the min below settingsMin', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} userMin={0} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Minimum value' }).focus();
+      await userEvent.keyboard('{ArrowDown}');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('does not step the max above settingsMax', async () => {
+      const onChange = vi.fn();
+      render(<Range {...defaultProps} userMax={100} onChange={onChange} />);
+      screen.getByRole('spinbutton', { name: 'Maximum value' }).focus();
+      await userEvent.keyboard('{ArrowUp}');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('ControlledRange', () => {
